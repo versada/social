@@ -1,5 +1,7 @@
 /* Copyright 2018 David Juaneda
+ * Copyright 2021 Sodexis
  * License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). */
+
 odoo.define(
     "mail_activity_board/static/src/components/chatter_topbar/chatter_topbar.js",
     function (require) {
@@ -26,8 +28,6 @@ odoo.define(
                  * @param {MouseEvent} ev
                  */
                 _onListActivity(ev) {
-                    console.log("test");
-                    console.log(this.chatter);
                     var self = this;
                     rpc.query({
                         model: this.chatter.thread.model,

@@ -27,6 +27,7 @@ odoo.define(
                  * @private
                  * @param {MouseEvent} ev
                  */
+                // eslint-disable-next-line no-unused-vars
                 _onListActivity(ev) {
                     var self = this;
                     rpc.query({

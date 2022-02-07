@@ -37,6 +37,8 @@ class MailThread(models.AbstractModel):
             custom_subjects = self.env["mail.message.custom.subject"].search(
                 [("model_id.model", "=", self._name), ("subtype_ids", "=", subtype_id)]
             )
+            if "partner_id" in self._fields and self.partner_id.lang:
+                custom_subjects = custom_subjects.with_context(lang=self.partner_id.lang)
             if not subject:
                 subject = (
                     "Re: %s"

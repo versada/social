@@ -22,6 +22,7 @@ class MailMessageCustomSubject(models.Model):
         required=True,
     )
     subject_template = fields.Char(
+        translate=True,
         string="Subject Template",
         required=True,
         help="Subject (placeholders may be used here)",

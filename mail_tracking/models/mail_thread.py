@@ -44,6 +44,13 @@ class MailThread(models.AbstractModel):
         )
         return super()._message_route_process(message, message_dict, routes)
 
+    def _routing_handle_bounce(self, email_message, message_dict):
+        bounced_message = message_dict["bounced_message"]
+        if bounced_message.mail_tracking_ids:
+            # TODO detect hard of soft bounce
+            bounced_message.mail_tracking_ids.event_create("soft_bounce", message_dict)
+        return super()._routing_handle_bounce(email_message, message_dict)
+
     def _message_get_suggested_recipients(self):
         """Adds email 'extra' recipients as suggested recipients.
 
@@ -75,9 +82,10 @@ class MailThread(models.AbstractModel):
                     )
             else:
                 partner = ResPartnerObj.browse(partner_id)
-                self._message_add_suggested_recipient(
-                    suggestions, partner=partner, reason=reason
-                )
+                if partner.email not in aliases:
+                    self._message_add_suggested_recipient(
+                        suggestions, partner=partner, reason=reason
+                    )
 
     @api.model
     def _fields_view_get(

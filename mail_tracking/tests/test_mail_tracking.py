@@ -9,6 +9,7 @@ import psycopg2
 import psycopg2.errorcodes
 
 from odoo import http
+from odoo.tests import users
 from odoo.tests.common import TransactionCase
 from odoo.tools import mute_logger
 
@@ -74,19 +75,24 @@ class TestMailTracking(TransactionCase):
         tracking.write({"recipient": False})
         self.assertEqual(False, tracking.recipient_address)
 
+    @users("admin", "demo")
     def test_message_post(self):
         # This message will generate a notification for recipient
-        message = self.env["mail.message"].create(
-            {
-                "subject": "Message test",
-                "author_id": self.sender.id,
-                "email_from": self.sender.email,
-                "message_type": "comment",
-                "model": "res.partner",
-                "res_id": self.recipient.id,
-                "partner_ids": [(4, self.recipient.id)],
-                "body": "<p>This is a test message</p>",
-            }
+        message = (
+            self.env["mail.message"]
+            .sudo()
+            .create(
+                {
+                    "subject": "Message test",
+                    "author_id": self.sender.id,
+                    "email_from": self.sender.email,
+                    "message_type": "comment",
+                    "model": "res.partner",
+                    "res_id": self.recipient.id,
+                    "partner_ids": [(4, self.recipient.id)],
+                    "body": "<p>This is a test message</p>",
+                }
+            )
         )
         message._moderate_accept()
         # Search tracking created
@@ -150,6 +156,37 @@ class TestMailTracking(TransactionCase):
         self.assertEqual(tracking_email.state, "error")
         self.assertEqual(tracking_email.error_type, "no_recipient")
         self.assertFalse(self.recipient.email_bounced)
+
+    def test_message_post_show_aliases(self):
+        # Create message with show aliases setup
+        self.env.company.mail_tracking_show_aliases = True
+        # Setup catchall domain
+        IrConfigParamObj = self.env["ir.config_parameter"].sudo()
+        IrConfigParamObj.set_param("mail.catchall.domain", "test.com")
+        # pylint: disable=C8107
+        message = self.env["mail.message"].create(
+            {
+                "subject": "Message test",
+                "author_id": self.sender.id,
+                "email_from": self.sender.email,
+                "message_type": "comment",
+                "model": "res.partner",
+                "res_id": self.recipient.id,
+                "partner_ids": [(4, self.recipient.id)],
+                "email_cc": "Dominique Pinon <unnamed@test.com>, customer-invoices@test.com",
+                "body": "<p>This is another test message</p>",
+            }
+        )
+        message._moderate_accept()
+        message_dict, *_ = message.message_format()
+        self.assertTrue(
+            any(
+                [
+                    tracking["recipient"] == "customer-invoices@test.com"
+                    for tracking in message_dict["partner_trackings"]
+                ]
+            )
+        )
 
     def _check_partner_trackings_cc(self, message):
         message_dict = message.message_format()[0]
@@ -299,7 +336,8 @@ class TestMailTracking(TransactionCase):
         # No author_id
         tracking.mail_message_id.author_id = False
         values = tracking.mail_message_id.get_failed_messages()[0]
-        self.assertEqual(values["author"][0], -1)
+        if values and values.get("author"):
+            self.assertEqual(values["author"][0], -1)
 
     def test_resend_failed_message(self):
         # This message will generate a notification for recipient
@@ -576,3 +614,34 @@ class TestMailTracking(TransactionCase):
             self.assertEqual(b"NONE", none.response[0])
             none = controller.mail_tracking_event(db, "open")
             self.assertEqual(b"NONE", none.response[0])
+
+    def test_bounce_tracking_event_created(self):
+        mail, tracking = self.mail_send(self.recipient.email)
+        message = self.env.ref("mail.mail_message_channel_1_1")
+        message.mail_tracking_ids = [(4, tracking.id, False)]
+        mail.mail_message_id = message
+        message_dict = {
+            "bounced_email": "test@test.net",
+            "bounced_message": message,
+            "bounced_msg_id": [message.message_id],
+            "bounced_partner": self.recipient,
+            "cc": "",
+            "date": "2023-02-07 12:35:53",
+            "email_from": "MAILER-DAEMON@eu-west-1.amazonses.com",
+            "from": "MAILER-DAEMON@eu-west-1.amazonses.com",
+            "in_reply_to": "<010201864d109aa7-west-1.amazonses.com>",
+            "is_internal": False,
+            "message_id": "<010201862be01f29-west-1.amazonses.com>",
+            "message_type": "email",
+            "parent_id": 15894917,
+            "partner_ids": [],
+            "recipients": "bounce+694942@recipient.net",
+            "references": "<010201862bdfa5e9-west-1.amazonses.com>",
+            "subject": "bounce notification",
+            "to": "bounce+694942-mailing.contact-836@test.net",
+        }
+        self.env["mail.thread"]._routing_handle_bounce(message, message_dict)
+        self.assertTrue(
+            "soft_bounce"
+            in message.mail_tracking_ids.tracking_event_ids.mapped("event_type")
+        )

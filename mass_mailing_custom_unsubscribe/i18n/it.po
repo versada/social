@@ -9,14 +9,15 @@ msgstr ""
 "Project-Id-Version: Odoo Server 10.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-02-26 01:46+0000\n"
-"PO-Revision-Date: 2018-02-26 01:46+0000\n"
-"Last-Translator: OCA Transbot <transbot@odoo-community.org>, 2017\n"
+"PO-Revision-Date: 2023-07-28 10:58+0000\n"
+"Last-Translator: mymage <stefano.consolaro@mymage.it>\n"
 "Language-Team: Italian (https://www.transifex.com/oca/teams/23907/it/)\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.17\n"
 
 #. module: mass_mailing_custom_unsubscribe
 #: model:ir.model.fields,help:mass_mailing_custom_unsubscribe.field_mail_unsubscription__mailing_list_ids
@@ -54,6 +55,13 @@ msgstr ""
 #: code:addons/mass_mailing_custom_unsubscribe/static/src/js/unsubscribe.js:0
 #, python-format
 msgid "An error occured. Please try again later or contact us."
+msgstr ""
+
+#. module: mass_mailing_custom_unsubscribe
+#. openerp-web
+#: code:addons/mass_mailing_custom_unsubscribe/static/src/js/unsubscribe.js:0
+#, python-format
+msgid "An error occurred. Please try again later or contact us."
 msgstr ""
 
 #. module: mass_mailing_custom_unsubscribe
@@ -114,16 +122,19 @@ msgid "Details Required"
 msgstr "Dettagli richiesti"
 
 #. module: mass_mailing_custom_unsubscribe
+#: model:ir.model.fields,field_description:mass_mailing_custom_unsubscribe.field_mail_blacklist__display_name
 #: model:ir.model.fields,field_description:mass_mailing_custom_unsubscribe.field_mail_unsubscription__display_name
 #: model:ir.model.fields,field_description:mass_mailing_custom_unsubscribe.field_mail_unsubscription_reason__display_name
+#: model:ir.model.fields,field_description:mass_mailing_custom_unsubscribe.field_mailing_list__display_name
+#: model:ir.model.fields,field_description:mass_mailing_custom_unsubscribe.field_mailing_mailing__display_name
 msgid "Display Name"
-msgstr "Nome da visualizzare"
+msgstr "Nome visualizzato"
 
 #. module: mass_mailing_custom_unsubscribe
 #: model:ir.model.fields,field_description:mass_mailing_custom_unsubscribe.field_mail_unsubscription__email
 #: model_terms:ir.ui.view,arch_db:mass_mailing_custom_unsubscribe.mail_unsubscription_view_search
 msgid "Email"
-msgstr "Email"
+msgstr "E-mail"
 
 #. module: mass_mailing_custom_unsubscribe
 #: model:ir.model.fields,field_description:mass_mailing_custom_unsubscribe.field_mail_unsubscription__failed_message_ids
@@ -171,8 +182,11 @@ msgid "I'm not interested"
 msgstr "Non sono interessato"
 
 #. module: mass_mailing_custom_unsubscribe
+#: model:ir.model.fields,field_description:mass_mailing_custom_unsubscribe.field_mail_blacklist__id
 #: model:ir.model.fields,field_description:mass_mailing_custom_unsubscribe.field_mail_unsubscription__id
 #: model:ir.model.fields,field_description:mass_mailing_custom_unsubscribe.field_mail_unsubscription_reason__id
+#: model:ir.model.fields,field_description:mass_mailing_custom_unsubscribe.field_mailing_list__id
+#: model:ir.model.fields,field_description:mass_mailing_custom_unsubscribe.field_mailing_mailing__id
 msgid "ID"
 msgstr "ID"
 
@@ -180,7 +194,7 @@ msgstr "ID"
 #: model:ir.model.fields,help:mass_mailing_custom_unsubscribe.field_mail_unsubscription__message_needaction
 #: model:ir.model.fields,help:mass_mailing_custom_unsubscribe.field_mail_unsubscription__message_unread
 msgid "If checked, new messages require your attention."
-msgstr ""
+msgstr "Se selezionata, nuovi messaggi richiedono attenzione."
 
 #. module: mass_mailing_custom_unsubscribe
 #: model:ir.model.fields,help:mass_mailing_custom_unsubscribe.field_mail_unsubscription__message_has_error
@@ -202,8 +216,11 @@ msgid "Is Follower"
 msgstr ""
 
 #. module: mass_mailing_custom_unsubscribe
+#: model:ir.model.fields,field_description:mass_mailing_custom_unsubscribe.field_mail_blacklist____last_update
 #: model:ir.model.fields,field_description:mass_mailing_custom_unsubscribe.field_mail_unsubscription____last_update
 #: model:ir.model.fields,field_description:mass_mailing_custom_unsubscribe.field_mail_unsubscription_reason____last_update
+#: model:ir.model.fields,field_description:mass_mailing_custom_unsubscribe.field_mailing_list____last_update
+#: model:ir.model.fields,field_description:mass_mailing_custom_unsubscribe.field_mailing_mailing____last_update
 msgid "Last Modified on"
 msgstr "Ultima modifica il"
 
@@ -240,7 +257,7 @@ msgstr "Motivi Disiscrizione"
 #. module: mass_mailing_custom_unsubscribe
 #: model:ir.model,name:mass_mailing_custom_unsubscribe.model_mailing_list
 msgid "Mailing List"
-msgstr "Mailing List"
+msgstr "Mailing list"
 
 #. module: mass_mailing_custom_unsubscribe
 #: model:ir.model.fields,field_description:mass_mailing_custom_unsubscribe.field_mail_unsubscription__mailing_list_ids

@@ -7,7 +7,7 @@
 {
     "name": "Email tracking",
     "summary": "Email tracking system for all mails sent",
-    "version": "14.0.1.1.1",
+    "version": "14.0.3.1.2",
     "category": "Social Network",
     "website": "https://github.com/OCA/social",
     "author": ("Tecnativa, " "Odoo Community Association (OCA)"),
@@ -24,6 +24,7 @@
         "views/mail_tracking_event_view.xml",
         "views/mail_message_view.xml",
         "views/res_partner_view.xml",
+        "views/res_config_settings.xml",
     ],
     "qweb": [
         "static/src/xml/mail_tracking.xml",
@@ -32,5 +33,4 @@
         "static/src/xml/failed_message/discuss.xml",
     ],
     "demo": ["demo/demo.xml"],
-    "pre_init_hook": "pre_init_hook",
 }
